@@ -9,17 +9,23 @@ export default function App () {
 const url = 'https://api.quotable.io/quotes/random?minLength=100&maxLength=200'
 const [quote, setQuote] = useState({})
 
-const fetchData = () => {
-  return fetch(url)
-    .then(response => response.json())
-    .then(json => setQuote(json[0]))
-}
+let data = {}
 
 useEffect(() => {
-  fetchData();
+  fetch(url)
+    .then(res => res.json())
+    .then(res => setQuote(res[0]))
 }, []);
 
-console.log(quote)
+useEffect(() => {
+  fetch(url)
+    .then(res => res.json())
+    .then(res => Object.assign(data, res[0]))
+}, [quote]);
+
+function handleClick () {
+  setQuote(data)
+}
 
 const color = randomColor({luminosity: "dark", alpha: 0.5})
 
@@ -61,7 +67,7 @@ const author = quote.author?.split(" ").join("")
           <button 
             id="new-quote"
             style={backgroundStyles}
-            onClick={fetchData}
+            onClick={handleClick}
           >
             New quote
           </button>
