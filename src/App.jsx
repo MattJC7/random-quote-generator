@@ -7,25 +7,17 @@ import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
 
 export default function App () {
 const url = 'https://api.quotable.io/quotes/random?minLength=100&maxLength=200'
-const [quote, setQuote] = useState({})
+const [quote, setQuote] = useState(null)
 
-let data = {}
-
-useEffect(() => {
-  fetch(url)
-    .then(res => res.json())
-    .then(res => setQuote(res[0]))
-}, []);
-
-useEffect(() => {
-  fetch(url)
-    .then(res => res.json())
-    .then(res => Object.assign(data, res[0]))
-}, [quote]);
-
-function handleClick () {
-  setQuote(data)
+const fetchData = () => {
+  return fetch(url)
+    .then(response => response.json())
+    .then(json => setQuote(json[0]))
 }
+
+useEffect(() => {
+  fetchData();
+}, []);
 
 const color = randomColor({luminosity: "dark", alpha: 0.5})
 
@@ -67,7 +59,7 @@ const author = quote.author?.split(" ").join("")
           <button 
             id="new-quote"
             style={backgroundStyles}
-            onClick={handleClick}
+            onClick={fetchData}
           >
             New quote
           </button>
