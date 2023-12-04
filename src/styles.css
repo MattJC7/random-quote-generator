@@ -16,6 +16,7 @@
   background-color: white;
   border-radius: 5px;
   width: 600px;
+  min-height: 300px;
   max-height: 70%;
   height: auto;
   display: flex;
@@ -27,6 +28,10 @@
   #quote-box {
     width: 80%;
   }
+}
+
+.text-wrapper {
+  margin-bottom: auto;
 }
 
 #text {
@@ -47,6 +52,7 @@
 
 #buttons {
   display: flex;
+
 }
 
 #new-quote {

@@ -4,26 +4,37 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import randomColor from "randomcolor"
 import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
 
-
 export default function App () {
+
 const url = 'https://api.quotable.io/quotes/random?minLength=100&maxLength=200'
-const [quote, setQuote] = useState(null)
+const [quote, setQuote] = useState({})
+const [loading, setLoading] = useState(true)
 
 const fetchData = () => {
   return fetch(url)
     .then(response => response.json())
-    .then(json => setQuote(json[0]))
+    .then(json => {
+      setQuote(json[0])
+      setLoading(false)
+    })
 }
 
 useEffect(() => {
-  fetchData();
+  setTimeout(fetchData, 0);
 }, []);
 
 const color = randomColor({luminosity: "dark", alpha: 0.5})
 
-const backgroundStyles = {
-  backgroundColor: color
-}
+const backgroundStyles = loading ? 
+  {
+    backgroundColor: "gray",
+    transition: "all 1s ease",
+
+  } : 
+  {
+    backgroundColor: color,
+    transition: "all 1s ease"
+  }
 
 const textStyles = {
   color: color
@@ -39,12 +50,14 @@ const author = quote.author?.split(" ").join("")
     >
       <div id="quote-box" >
         <div className="text-wrapper">
-          <p id="text" style={textStyles}>
-            {quote.content}
+          <p 
+              id="text" 
+              style={textStyles}
+          >
+              {quote?.content}
           </p>
-          <p id="author">- {quote.author}</p>
+          {!loading && <p id="author">- {quote.author}</p>}
         </div>
-
         <div id="buttons">
           <a 
             href={`https://twitter.com/intent/tweet?text=${tweetUrl}&hashtags=${author}`}
